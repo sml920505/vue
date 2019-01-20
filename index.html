@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.js"></script>
+    <script src="https://cdn.bootcss.com/html2canvas/0.5.0-beta4/html2canvas.js"></script>
+    <style>
+
+        .mask{
+            width:100%;
+            height:100%;
+            position:fixed;
+            background-color:#999;
+            z-index:9999;
+            top:0;
+            left:0;
+            opacity:1;
+            Transition: opacity 1s  ease-in-out;
+        /* transition-delay: s; */
+    </style>
+
+
+    <title>Document</title>
+</head>
+<body>
+
+<div id="example-2" >
+    <!--状态1-->
+    <div v-if='curpage==="index"'>
+    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+    <label for="jack">Jack</label>
+    <input type="checkbox" id="john" value="John" v-model="checkedNames">
+    <label for="john">John</label>
+    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+    <label for="mike">Mike</label>
+    <br>
+    <span>Checked names: {{ checkedNames }}</span>
+    <button v-on:click="first">Greet</button>
+    </div>
+    <!--状态2-->
+    <div v-if='curpage==="next"'  >
+    <div>smzdm</div>
+    <div>{{checkedNames}}</div>
+    <div>{{chuliguo}}</div>
+    <button v-on:click="curpage = 'index'">Greet</button>
+    <button v-on:click="theName">Greet</button>
+    <button v-on:click="theProcess">Greet</button>
+        <div class='mask' v-show="hiddenName" ></div>
+    </div>
+    <!--<img  v-bind:src="dataURL" alt="">-->
+        <div v-if='curpage==="output"'>
+
+        <img v-bind:src="dataURL" alt="">
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+    var example2 =new Vue({
+        el: '#example-2',
+        data: {
+            checkedNames: [],
+            chuliguo:" moren",
+            curpage:'index',
+            dataURL:'',
+            hiddenName: true
+        }   ,
+        methods:{
+            first:function(event){
+                this.curpage="next"
+
+                setTimeout(() => {  this.hiddenName= false }
+
+                    , 1000)
+
+                setTimeout(() => {  html2canvas(document.getElementById("example-2"),{
+                        width:500 ,
+                        height:500,
+
+                    }).then((canvas) => {
+                        let dataURL = canvas.toDataURL("image/png");
+                        this.dataURL = dataURL;
+                    });
+                        this.curpage = 'output' }
+
+                    , 2000)
+
+
+
+            },
+            theName : function (event) {
+                if (this.checkedNames.indexOf("Jack") > -1) {
+                    this.chuliguo = "中国历史大全，上下五千年，万历十五年"
+                }
+                console.log("hello")
+
+
+            },
+            theProcess:function () {
+                // html2canvas(document.getElementById("example-2"),{
+                //     width:500 ,
+                //     height:500,
+                //
+                // }).then((canvas) => {
+                //     let dataURL = canvas.toDataURL("image/png");
+                //     this.dataURL = dataURL;
+                // });
+                // this.curpage = 'output'
+
+            }
+
+            }
+
+    
+
+
+
+
+    })
+</script>
+</body>
+</html>
