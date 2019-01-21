@@ -28,25 +28,181 @@
 <body>
 
 <div id="example-2" >
-    <!--状态1-->
+    <!--=========================页面1 checkbox=================================-->
     <div v-if='curpage==="index"'>
-    <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
-    <label for="jack">Jack</label>
-    <input type="checkbox" id="john" value="John" v-model="checkedNames">
-    <label for="john">John</label>
-    <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
-    <label for="mike">Mike</label>
+
+    <!--checkbox-->
+    <input type="checkbox" id="jack" value="china" v-model="checkedNames">
+    <label for="jack">china</label>
+    <input type="checkbox" id="john" value="japan" v-model="checkedNames">
+    <label for="john">japan</label>
+    <input type="checkbox" id="mike" value="usa" v-model="checkedNames">
+    <label for="mike">usa</label>
     <br>
+    <!--在页面1下方显示的绑定的数组-->
     <span>Checked names: {{ checkedNames }}</span>
+    <!--按钮 切换页面二-->
     <button v-on:click="first">Greet</button>
     </div>
-    <!--状态2-->
+
+    <!--=========================页面2=================================-->
     <div v-if='curpage==="next"'  >
     <div>smzdm</div>
     <div>{{checkedNames}}</div>
-    <div>{{chuliguo}}</div>
-    <button v-on:click="curpage = 'index'">Greet</button>
-    <button v-on:click="theName">Greet</button>
+    <div>{{newchina}}</div>
+    <!--循环数组-->
+    <ul >
+        <li v-for="item in newchina">
+            {{item}}
+        </li>
+    </ul>
+    <div>{{newjapan}}</div>
+    <div>{{newusa}}</div>
+
+    <img src="S:\【2 0 1 9】\webstoorm\66.jpg" alt="">
+
+
+    <!--<button v-on:click="curpage = 'index'">Greet</button>-->
+    <!--<button v-on:click="theName">Greet</button>-->
+    <!--<button v-on:click="theProcess">Greet</button>-->
+        <!--遮罩-->
+    <div class='mask' v-show="hiddenName"  v-bind:style = "{opacity:opc}"></div>
+
+    </div>
+    <!--<img  v-bind:src="dataURL" alt="">-->
+        <div v-if='curpage==="output"'>
+
+        <img v-bind:src="dataURL" alt="">
+
+
+    </div>
+
+</div>
+
+
+
+<script>
+    var example2 =new Vue({
+        el: '#example-2',
+        data: {
+            checkedNames: [],
+            // 把用户的输入转变为数据库的输出
+            newchina:[],
+            newjapan:"",
+            newusa:"",
+            curpage:'index',
+            dataURL:'',
+            hiddenName: true,
+            opc:" "
+        }   ,
+
+        //=========================下面是方法=================================
+        methods:{
+            //页面1按钮的方法
+            first:function(event){
+                // =========================改变页面路由=================================
+                this.curpage="next"
+
+                //=========================转换用户的输入，变为数据库中的内容 随机返回3个=================================
+
+                if (this.checkedNames.indexOf("china") > -1) {
+                    var arr =["中国历史大全","上下五千年","万历十五年","大清相国","丑陋的中国人","潜规则","历史是个什么玩意","毛泽东传","他改变了中国",]
+                    var chinaresult = [];
+                    var ranNum = 3;
+                    for (var i = 0; i < ranNum; i++) {
+                        var ran = Math.floor(Math.random() * arr.length);
+                        chinaresult.push(arr.splice(ran, 1)[0]);
+                    };
+                    this.newchina = chinaresult
+                }
+
+
+
+
+                if (this.checkedNames.indexOf("japan") > -1) {
+                    this.newjapan = "明治维新，菊与刀"
+                }
+                if (this.checkedNames.indexOf("usa") > -1) {
+                    this.newusa = "美国历史，美国种族简史"
+                }
+
+
+                //待使用的算法
+                // var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+                //
+                // var result = [];
+                //
+                // var ranNum = 5;
+                //
+                // for (var i = 0; i < ranNum; i++) {
+                //
+                //     var ran = Math.floor(Math.random() * arr.length);
+                //
+                //     result.push(arr.splice(ran, 1)[0]);
+                //
+                // };
+
+                // =========================控制元素的显示隐藏=================================
+                //3秒后关闭遮罩
+                setTimeout(() => {  this.hiddenName= false }
+
+                    , 2000)
+
+                // =========================控制透明度=================================
+                //2秒后把遮罩透明度变0，有1秒的转换时间
+                setTimeout(() => {  this.opc= "0 "}
+
+                    , 1000)
+
+                //=========================控制html2canvas绘制=================================
+                setTimeout(() => {  html2canvas(document.getElementById("example-2"),{
+                        width:1100 ,
+                        height:1500,
+                        // allowTaint:true,
+                        // useCORS:true,
+
+                    }).then((canvas) => {
+                        let dataURL = canvas.toDataURL("image/png");
+                        this.dataURL = dataURL;
+                    });
+                        this.curpage = 'output' }
+
+                    , 1500)
+            },
+
+            //=========================转换用户的输入，变为数据库中的内容=================================
+            theName : function (event) {
+                if (this.checkedNames.indexOf("china") > -1) {
+                    this.chuliguo = "中国历史大全，上下五千年，万历十五年"
+                }
+                console.log("hello")
+
+
+            },
+            theProcess:function () {
+                // html2canvas(document.getElementById("example-2"),{
+                //     width:500 ,
+                //     height:500,
+                //
+                // }).then((canvas) => {
+                //     let dataURL = canvas.toDataURL("image/png");
+                //     this.dataURL = dataURL;
+                // });
+                // this.curpage = 'output'
+
+            }
+
+            }
+
+    
+
+
+
+
+    })
+</script>
+</body>
+</html>    <button v-on:click="theName">Greet</button>
     <button v-on:click="theProcess">Greet</button>
         <div class='mask' v-show="hiddenName" ></div>
     </div>
